@@ -1,27 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NewIdeaForm from './NewIdeaForm.js'
+import IdeaCardContainer from './IdeaCardContainer.js'
 
 class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      ideas: []
+    }
+  }
+
+  addIdea = (idea) => {
+    // console.log('addIdea')
+    let newIdea = {...idea, id: Date.now()}
+    let ideas = [...this.state.ideas, newIdea]
+
+    this.setState({ ideas })
+  }
+
+  removeIdea = (id) => {
+    const ideas = this.state.ideas.filter((idea) => {
+      return idea.id !== id
+    })
+    this.setState({ideas})
+  }
+
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+
+    if (this.state.ideas.length) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <h1>IdeaBox</h1>
+          </header>
+          <NewIdeaForm addIdea={this.addIdea} />
+          <IdeaCardContainer ideas={this.state.ideas} removeIdea={this.removeIdea} />
+        </div>
+      );
+    } else {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <h1>IdeaBox</h1>
+          </header>
+          <NewIdeaForm addIdea={this.addIdea} />
+        </div>
+      );     
+    }
   }
 }
 
